@@ -42,17 +42,18 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
         var httpClient;
         try {
             
-            var urlJob = '{0}/job/{1}'.format( this._urlJenkins , "jobName");
+            var urlJob = '{0}/job/{1}'.format( this._urlJenkins , jobName);
             //buildWithParameters?token=bdk-token
             if(params != null){
                 var urlParam = Object.keys(params).map(function(k) {
-                    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+                    return encodeURIComponent(k) + '=' + encodeURIComponent(params[k])
                 }).join('&')
                 urlJob += '/buildWithParameters'+(token != null ? '?token='+token +'&': '?');
                 urlJob += urlParam;       
             }else{
                 urlJob += '/build'+(token != null ? '?token='+token : '');
             }
+            print(urlJob);
             var uri = URI.create(urlJob);
             var host = new HttpHost(uri.getHost(), uri.getPort(), uri.getScheme());
 
@@ -66,9 +67,11 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
             var httpPost = new HttpPost(uri);
             var localContext = HttpClientContext.create();
             localContext.setAuthCache(authCache);
-
+			print('befor build ');
             var response = httpClient.execute(host, httpPost, localContext);
-
+			if(response.getStatusLine().getStatusCode() >= 300 ){
+				throw response.getStatusLine().getStatusCode()+':error';
+			}  
             var regex = /queue\/item\/(\d{1,})?\//i;
             for (var i = 0; i < response.getAllHeaders().length; i++) {
                 var header = response.getAllHeaders()[i];
@@ -86,6 +89,7 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
             httpClient.close();
 
         } catch (err) {
+        	print(err);
             if (httpClient != null) {
                 httpClient.close();
             }
@@ -125,6 +129,7 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
             httpClient.close();
 
         } catch (err) {
+        	print(err);
             if (httpClient != null) {
                 httpClient.close();
             }
@@ -160,6 +165,7 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
             httpClient.close();
 
         } catch (err) {
+            print(err);
             if (httpClient != null) {
                 httpClient.close();
             }
@@ -169,4 +175,3 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
     }
 
 }
-
