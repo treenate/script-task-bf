@@ -106,7 +106,7 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
 
             var uri = URI.create('{0}/queue/item/{1}/api/json?pretty=true'.format(this._urlJenkins , queueID));
             var host = new HttpHost(uri.getHost(), uri.getPort(), uri.getScheme());
-
+	    print('url get queue item : '+uri);
             var credsProvider = new BasicCredentialsProvider();
             credsProvider.setCredentials(new AuthScope(uri.getHost(), uri.getPort()), this._userPassCred);
             var authCache = new BasicAuthCache();
@@ -116,9 +116,10 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
             var httpGet = new HttpGet(uri);
             var localContext = HttpClientContext.create();
             localContext.setAuthCache(authCache);
-
+	    print('request ..... ');
             var response = httpClient.execute(host, httpGet, localContext);
             var statusLine = response.getStatusLine();
+            print('response statusCode : '+statusLine.getStatusCode());
             if(statusLine.getStatusCode() >= 300 ){
                 throw 'Request fail.'
             }
