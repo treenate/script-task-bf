@@ -10,6 +10,7 @@ var AuthCache = Java.type('org.apache.http.client.AuthCache');
 var ClientProtocolException = Java.type('org.apache.http.client.ClientProtocolException');
 var CredentialsProvider = Java.type('org.apache.http.client.CredentialsProvider');
 var HttpPost = Java.type('org.apache.http.client.methods.HttpPost');
+var HttpGet = Java.type('org.apache.http.client.methods.HttpGet');
 var HttpClientContext = Java.type('org.apache.http.client.protocol.HttpClientContext');
 var BasicScheme = Java.type('org.apache.http.impl.auth.BasicScheme');
 var BasicAuthCache = Java.type('org.apache.http.impl.client.BasicAuthCache');
