@@ -124,6 +124,7 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
                 throw 'Request fail.'
             }
             var responseBody = EntityUtils.toString(response.getEntity(), "UTF-8");
+		responseBody = JSON.parse(responseBody);
             print('response body : '+JSON.stringify(responseBody));		
             if(responseBody.executable){
                 ret.executable = true;
@@ -164,6 +165,7 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
                 throw 'Request fail.'
             }
             var responseBody = EntityUtils.toString(response.getEntity(), "UTF-8");
+		responseBody = JSON.parse(responseBody);
             ret = responseBody;
             httpClient.close();
 
