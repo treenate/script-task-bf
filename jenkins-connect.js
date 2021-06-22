@@ -170,4 +170,3 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
 
 }
 
-export default JenkinsConnector
