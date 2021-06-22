@@ -124,6 +124,7 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
                 throw 'Request fail.'
             }
             var responseBody = EntityUtils.toString(response.getEntity(), "UTF-8");
+            print('response body : '+JSON.stringify(responseBody));		
             if(responseBody.executable){
                 ret.executable = true;
                 ret.jobID = responseBody.executable.number;
