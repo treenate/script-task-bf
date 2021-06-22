@@ -18,6 +18,19 @@ var CloseableHttpClient = Java.type('org.apache.http.impl.client.CloseableHttpCl
 var HttpClients = Java.type('org.apache.http.impl.client.HttpClients');
 var EntityUtils = Java.type('org.apache.http.util.EntityUtils');
 
+// First, checks if it isn't implemented yet.
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) { 
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+      ;
+    });
+  };
+}
+
 function JenkinsConnector(urlJenkins, userName, authToken) {
     this._urlJenkins = urlJenkins;
     this._userName = userName;
@@ -29,7 +42,7 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
         var httpClient;
         try {
             
-            var urlJob = `${this._urlJenkins}/job/${jobName}`;
+            var urlJob = '{0}/job/{1}'.format( this._urlJenkins , "jobName");
             //buildWithParameters?token=bdk-token
             if(params != null){
                 var urlParam = Object.keys(params).map(function(k) {
@@ -85,7 +98,8 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
         var ret = { executable : false };
         var httpClient;
         try {
-            var uri = URI.create(`urlJenkins/queue/item/${queueID}/api/json?pretty=true`);
+
+            var uri = URI.create('{0}/queue/item/{1}/api/json?pretty=true'.format(this._urlJenkins , queueID));
             var host = new HttpHost(uri.getHost(), uri.getPort(), uri.getScheme());
 
             var credsProvider = new BasicCredentialsProvider();
@@ -123,7 +137,7 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
         var ret = { };
         var httpClient;
         try {
-            var uri = URI.create(`urlJenkins/job/${jobName}/${jobID}/api/json?pretty=true`);
+            var uri = URI.create('{0}/job/{1}/{2}/api/json?pretty=true'.format(this._urlJenkins,jobName,jobID));
             var host = new HttpHost(uri.getHost(), uri.getPort(), uri.getScheme());
 
             var credsProvider = new BasicCredentialsProvider();
