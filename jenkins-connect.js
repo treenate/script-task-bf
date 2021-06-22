@@ -132,7 +132,7 @@ function JenkinsConnector(urlJenkins, userName, authToken) {
             httpClient.close();
 
         } catch (err) {
-        	print(err);
+        	print(JSON.stringify(err));
             if (httpClient != null) {
                 httpClient.close();
             }
